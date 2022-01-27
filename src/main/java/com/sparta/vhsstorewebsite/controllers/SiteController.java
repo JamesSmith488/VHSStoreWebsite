@@ -1,13 +1,17 @@
 package com.sparta.vhsstorewebsite.controllers;
 
+import com.sparta.vhsstorewebsite.entities.CustomerEntity;
 import com.sparta.vhsstorewebsite.entities.FilmEntity;
 import com.sparta.vhsstorewebsite.entities.UserEntity;
+import com.sparta.vhsstorewebsite.entities.WaitingUserEntity;
 import com.sparta.vhsstorewebsite.repositories.*;
+import com.sparta.vhsstorewebsite.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -23,9 +27,11 @@ public class SiteController {
     private final FilmRepository filmRepository;
     private final StaffRepository staffRepository;
     private final UserRepository userRepository;
+    private final WaitingUserRepository waitingUserRepository;
+    private final UserService userService = new UserService();
 
     @Autowired
-    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, StaffRepository staffRepository, UserRepository userRepository) {
+    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository) {
         this.actorRepository = actorRepository;
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
@@ -34,6 +40,7 @@ public class SiteController {
         this.filmRepository = filmRepository;
         this.staffRepository = staffRepository;
         this.userRepository = userRepository;
+        this.waitingUserRepository = waitingUserRepository;
     }
 
     @GetMapping("/")
@@ -73,7 +80,9 @@ public class SiteController {
     }
 
     @GetMapping("/customer-request")
-    public String addCustomer(){
+    public String addCustomer(Model model){
+        WaitingUserEntity waitingUserEntity = new WaitingUserEntity();
+        model.addAttribute("customer-request", waitingUserEntity);
         return "add-customer";
     }
 
@@ -101,13 +110,79 @@ public class SiteController {
     }
 
     @GetMapping("/add-user")
-    public String goToAddUser() {
+    public String goToAddUser(Model model) {
+        UserEntity userEntity = new UserEntity();
+        model.addAttribute("customer", userEntity);
         return "add-user";
     }
 
+    @PostMapping("/save-user")
+    public String saveUser(@ModelAttribute("user") UserEntity entity){
+        userRepository.save(entity);
+        return "index";
+    }
+
+    @GetMapping("/edit-user/{id}")
+    public String editUser(@PathVariable("id") Integer id, Model model){
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Customer ID" + id));
+        model.addAttribute("user", userEntity);
+        return "edit-user";
+    }
+
+    @PostMapping("/update-user/{id}")
+    public String updateUser(@ModelAttribute("user") UserEntity updatedUser, @PathVariable("id") Integer id){
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Customer ID" + id));
+        userService.update(updatedUser, userEntity);
+        userRepository.save(userEntity);
+        return "index";
+    }
+
+    @GetMapping("/delete-user/{id}")
+    public String deleteUser(@PathVariable("id") Integer id){
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid User ID" + id));
+        userRepository.delete(userEntity);
+        return "index";
+    }
+
     @GetMapping("/add-vhs")
-    public String goToAddVhs() {
+    public String goToAddVhs(Model model) {
+        FilmEntity filmEntity = new FilmEntity();
+        model.addAttribute("film", filmEntity);
         return "add-vhs";
+    }
+
+    @PostMapping("/save-vhs")
+    public String saveVhs(@ModelAttribute("film") FilmEntity entity){
+        filmRepository.save(entity);
+        return "index";
+    }
+
+    @GetMapping("/delete-vhs/{id}")
+    public String deleteCustomer(@PathVariable("id") Integer id){
+        FilmEntity filmEntity = filmRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id));
+        filmRepository.delete(filmEntity);
+        return "index";
+    }
+
+    @GetMapping("/edit-vhs/{id}")
+    public String editVhs(@PathVariable("id") Integer id, Model model){
+        FilmEntity filmEntity = filmRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id));
+        model.addAttribute("film", filmEntity);
+        return "edit-vhs";
+    }
+
+    @PostMapping("/update-vhs/{id}")
+    public String updateCustomer(@ModelAttribute("film") UserEntity updatedUser, @PathVariable("id") Integer id){
+        FilmEntity filmEntity = filmRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id));
+        //filmService.update(updatedUser, userEntity);
+        filmRepository.save(filmEntity);
+        return "index";
     }
 
     @GetMapping("/rented")
@@ -118,13 +193,13 @@ public class SiteController {
 
     @GetMapping("/customer-waiting-list")
     public String goToCustomerWaitingList(Model model) {
-        model.addAttribute("customers", customerRepository.findAll());
+        model.addAttribute("customers-waiting", waitingUserRepository.findAll());
         return "customer-waiting-list";
     }
 
     @GetMapping("/show-staff")
     public String goToStaff(Model model) {
-        model.addAttribute("staff", staffRepository.findAll());
+        model.addAttribute("staff", getStaff(userRepository.findAll()));
         return "show-staff";
     }
 
