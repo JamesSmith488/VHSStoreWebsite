@@ -169,13 +169,13 @@ public class SiteController {
 
     @GetMapping("/customer-waiting-list")
     public String goToCustomerWaitingList(Model model) {
-        model.addAttribute("customers", customerRepository.findAll());
+        model.addAttribute("customers", getCustomers(userRepository.findAll()));
         return "customer-waiting-list";
     }
 
     @GetMapping("/show-staff")
     public String goToStaff(Model model) {
-        model.addAttribute("staff", staffRepository.findAll());
+        model.addAttribute("staff", getStaff(userRepository.findAll()));
         return "show-staff";
     }
 
