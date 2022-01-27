@@ -61,9 +61,22 @@ public class SiteController {
 
     @GetMapping("/search")
     public String goToSearch(Model model) {
-        model.addAttribute("film", filmRepository.findAll());
-        model.addAttribute("category", categoryRepository.findAll());
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("actors",actorRepository.findAll());
+
         return "search";
+    }
+
+    @PostMapping("/search-results")
+    public String getSearchResults(@ModelAttribute("filmName") String filmName, Model model) {
+        ArrayList<FilmEntity> foundFilms = new ArrayList<>();
+        for (FilmEntity filmEntity : filmRepository.findAll()) {
+            if (filmEntity.getTitle().contains(filmName.toUpperCase())) {
+                foundFilms.add(filmEntity);
+            }
+        }
+        model.addAttribute("searchResults", foundFilms);
+        return "search-results";
     }
 
     @GetMapping("/customer-request")
