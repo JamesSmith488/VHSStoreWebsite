@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:insert="fragments/header"></div>
+
+<form th:action="@{/login}" method="post">
+    <input type="Username" placeholder="Username"/><br><p/>
+    <input type="Password" placeholder="Password"/><br><p/>
+
+    <input type="checkbox" id="remember-me" name="remember-me">
+    <label for="remember-me">Remember me</label><br><p/>
+
+    <button class="loginButton" type="submit" value="Sign in">Sign in</button>
+</form>
+
+<button class="loginExtraButton" th:href="@{/customer-request}">Sign up</button>
+<button class="loginExtraButton" th:href="@{/index}">Cancel</button><br><p/>
+<div th:insert="fragments/footer :: main"></div>
+</body>
+</html>

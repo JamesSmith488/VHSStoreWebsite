@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<div th:insert="fragments/header"></div>
+<h2>Please select an admin task:</h2>
+<button class="adminButton" th:href="@{/add-vhs}">Add VHS</button><br><p/>
+<button class="adminButton" th:href="@{/add-user}">Add User</button><br><p/>
+<button class="adminButton" th:href="@{/show-staff}">Show Staff</button><br><p/>
+<button class="adminButton" th:href="@{/show-vhs}">Show VHS</button><br><p/>
+<button class="adminButton" th:href="@{/show-customers}">Show Customers</button><br><p/>
+<button class="adminButton" th:href="@{/customer-waiting-list}">Show Waiting Customers</button><br><p/>
+<button class="adminButton" th:href="@{/reserved-vhs}">Show Currently Rented</button><br><p/>
+<div th:insert="fragments/footer :: main"></div>
+</body>
+</html>

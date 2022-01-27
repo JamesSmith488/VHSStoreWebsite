@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Show Staff</title>
+</head>
+<body>
+<div th:insert="fragments/header"></div>
+<table class="staff-table">
+    <thead>
+    <tr>
+        <th>First Name</th>
+        <th>Second Name</th>
+        <th>Email</th>
+        <th>Address</th>
+    </tr>
+    </thead>
+    <tr th:each="staff : ${staffs}">
+        <td th:text="${staff.firstName}"></td>
+        <td th:text="${staff.lastName}"></td>
+        <td th:text="${staff.email}"></td>
+        <td th:text="${staff.address}"></td>
+
+        <td><a th:href="@{/delete/{id}(id=${staff.id})}">delete</a></td>
+        <td><a th:href="@{/edit/{id}(id=${staff.id})}">edit</a></td>
+    </tr>
+</table>
+
+<form class="d-flex">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    <button th:href="@{/show-staff}" class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+<div th:insert="fragments/footer :: main"></div>
+</body>
+</html>
