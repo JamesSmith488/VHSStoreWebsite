@@ -1,10 +1,14 @@
 package com.sparta.vhsstorewebsite.controllers;
 
+import com.sparta.vhsstorewebsite.entities.UserEntity;
 import com.sparta.vhsstorewebsite.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class SiteController {
@@ -15,9 +19,10 @@ public class SiteController {
     private final FilmCategoryRepository filmCategoryRepository;
     private final FilmRepository filmRepository;
     private final StaffRepository staffRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, StaffRepository staffRepository) {
+    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, StaffRepository staffRepository, UserRepository userRepository) {
         this.actorRepository = actorRepository;
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
@@ -25,6 +30,7 @@ public class SiteController {
         this.filmCategoryRepository = filmCategoryRepository;
         this.filmRepository = filmRepository;
         this.staffRepository = staffRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/")
@@ -67,7 +73,7 @@ public class SiteController {
 
     @GetMapping("/show-customers")
     public String getAllCustomers(Model model) {
-        model.addAttribute("customers", customerRepository.findAll());
+        model.addAttribute("customers", getCustomers(userRepository.findAll()));
         return "show-customers";
     }
 
@@ -104,5 +110,22 @@ public class SiteController {
         model.addAttribute("staff", staffRepository.findAll());
         return "show-staff";
     }
+
+    private List<UserEntity> getStaff(List<UserEntity> allUsers){
+        List<UserEntity> staff = new ArrayList<>();
+        for (UserEntity e: allUsers) {
+            if (e.getRole().equals("STAFF")) staff.add(e);
+        }
+        return staff;
+    }
+
+    private List<UserEntity> getCustomers(List<UserEntity> allUsers){
+        List<UserEntity> customers = new ArrayList<>();
+        for (UserEntity e: allUsers) {
+            if (e.getRole().equals("CUSTOMER")) customers.add(e);
+        }
+        return customers;
+    }
+
 
 }
