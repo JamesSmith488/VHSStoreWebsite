@@ -16,8 +16,8 @@
             <th>Edit</th>
         </tr>
     </thread>
-    <tr th:each="film : ${film}">
-        <td th:text="${title}"></td>
+    <tr th:each="film : ${films}">
+        <td th:text="${film.title}"></td>
 <!--        <td th:text="${customer}"-->
 <!--        <td th:text="${rental_date}"></td>-->
 <!--        <td th:text="${return_date}"></td>-->
