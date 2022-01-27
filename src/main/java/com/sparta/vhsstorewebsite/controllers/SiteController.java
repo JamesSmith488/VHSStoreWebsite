@@ -1,5 +1,6 @@
 package com.sparta.vhsstorewebsite.controllers;
 
+import com.sparta.vhsstorewebsite.entities.CustomerEntity;
 import com.sparta.vhsstorewebsite.entities.FilmEntity;
 import com.sparta.vhsstorewebsite.entities.UserEntity;
 import com.sparta.vhsstorewebsite.repositories.*;
@@ -58,6 +59,7 @@ public class SiteController {
     @GetMapping("/search")
     public String goToSearch(Model model) {
         model.addAttribute("film", filmRepository.findAll());
+        model.addAttribute("category", categoryRepository.findAll());
         return "search";
     }
 
@@ -90,7 +92,9 @@ public class SiteController {
     }
 
     @GetMapping("/add-user")
-    public String goToAddUser() {
+    public String goToAddUser(Model model) {
+        UserEntity userEntity = new UserEntity();
+        model.addAttribute("customer", userEntity);
         return "add-user";
     }
 
@@ -126,7 +130,9 @@ public class SiteController {
     }
 
     @GetMapping("/add-vhs")
-    public String goToAddVhs() {
+    public String goToAddVhs(Model model) {
+        FilmEntity filmEntity = new FilmEntity();
+        model.addAttribute("film", filmEntity);
         return "add-vhs";
     }
 
