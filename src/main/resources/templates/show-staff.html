@@ -15,14 +15,13 @@
         <th>Address</th>
     </tr>
     </thead>
-    <tr th:each="staff : ${staffs}">
+    <tr th:each="staff : ${staff}">
         <td th:text="${staff.firstName}"></td>
         <td th:text="${staff.lastName}"></td>
         <td th:text="${staff.email}"></td>
-        <td th:text="${staff.address}"></td>
 
-        <td><a th:href="@{/delete/{id}(id=${staff.id})}">delete</a></td>
-        <td><a th:href="@{/edit/{id}(id=${staff.id})}">edit</a></td>
+        <td><a th:href="@{/delete/{id}(id=${staff.userId})}">delete</a></td>
+        <td><a th:href="@{/edit/{id}(id=${staff.userId})}">edit</a></td>
     </tr>
 </table>
 
