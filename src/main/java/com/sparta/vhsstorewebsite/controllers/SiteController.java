@@ -1,11 +1,14 @@
 package com.sparta.vhsstorewebsite.controllers;
 
+import com.sparta.vhsstorewebsite.entities.FilmEntity;
 import com.sparta.vhsstorewebsite.entities.UserEntity;
 import com.sparta.vhsstorewebsite.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +54,22 @@ public class SiteController {
 
     @GetMapping("/search")
     public String goToSearch(Model model) {
-        model.addAttribute("films", filmRepository.findAll());
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("actors",actorRepository.findAll());
+
         return "search";
+    }
+
+    @PostMapping("/search-results")
+    public String getSearchResults(@ModelAttribute("filmName") String filmName, Model model) {
+        ArrayList<FilmEntity> foundFilms = new ArrayList<>();
+        for (FilmEntity filmEntity : filmRepository.findAll()) {
+            if (filmEntity.getTitle().contains(filmName.toUpperCase())) {
+                foundFilms.add(filmEntity);
+            }
+        }
+        model.addAttribute("searchResults", foundFilms);
+        return "search-results";
     }
 
     @GetMapping("/customer-request")

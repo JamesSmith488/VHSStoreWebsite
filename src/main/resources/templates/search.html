@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Search</title>
@@ -8,39 +8,28 @@
 <div th:insert="fragments/header"></div>
 
 <div class="search-bar">
-    <h2>Search for a Film</h2>
-    <form th:action="@{/search-results}" method="post">
-        <label>Film Name: </label>
-        <input type="text" name="customerName"/>
-        <select th:field="*{category}">
-            <option value="">Select Category</option>
-            <option th:each="category : ${category}"
-                    th:value="${category.category_id}"
-                    th:text="${category.name}"></option>
+    <form th:action="@{search-results}" method="post">
+
+        <label>Film name:</label>
+        <input type="text" name="filmName"/>
+
+        <label> Actor: </label>
+        <input type="text" name="actorName">
+
+        <label> Category: </label>
+        <select th:field="*{categories}">
+            <option value="">All</option>
+            <option th:each="category : ${categories}"
+                    th:value="${category_id}"
+                    th:text="${category.name}">
+
+            </option>
         </select>
-        <input type="submit" value="Search">
+
+        <input type="submit" value="SEARCH">
     </form>
 </div>
 
-<div>
-    <table class="search-results-table">
-        <thead>
-        <tr>
-            <th>Film name</th>
-            <th>Film description</th>
-            <th>Film age rating</th>
-        </tr>
-        </thead>
-            <tr th:each="film : ${films}">
-                <td th:text="${film.name}"></td>
-                <td th:text="${film.description}"></td>
-                <td th:text="${film.rating}"></td>
-
-                <td><a th:href="@{/reserve/{id}(id=${film.id})}">Reserve</a></td>
-            </tr>
-    </table>
-    </table>
-</div>
-<div th:insert="fragments/footer :: main"></div>
+<div th:insert="fragments/footer"></div>
 </body>
 </html>
