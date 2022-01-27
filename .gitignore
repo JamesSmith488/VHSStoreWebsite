@@ -15,7 +15,7 @@ target/
 
 ### IntelliJ IDEA ###
 .idea
-*.properties
+src/main/java/resources/application.properties
 *.iws
 *.iml
 *.ipr
