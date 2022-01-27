@@ -16,11 +16,11 @@
     </tr>
     </thead>
         <tr th:each="film : ${films}">
-            <td th:text="${film.name}"></td>
+            <td th:text="${film.title}"></td>
             <td th:text="${film.description}"></td>
             <td th:text="${film.rating}"></td>
 
-            <td><a th:href="@{/reserve/{id}(id=${film.id})}">Reserve</a></td>
+            <td><a th:href="@{/reserve/{id}(id=${film.filmId})}">Reserve</a></td>
         </tr>
 </table>
 
