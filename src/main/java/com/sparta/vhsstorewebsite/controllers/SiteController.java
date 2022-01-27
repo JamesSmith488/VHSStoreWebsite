@@ -1,7 +1,9 @@
 package com.sparta.vhsstorewebsite.controllers;
 
+import com.sparta.vhsstorewebsite.entities.CustomerEntity;
 import com.sparta.vhsstorewebsite.entities.FilmEntity;
 import com.sparta.vhsstorewebsite.entities.UserEntity;
+import com.sparta.vhsstorewebsite.entities.WaitingUserEntity;
 import com.sparta.vhsstorewebsite.repositories.*;
 import com.sparta.vhsstorewebsite.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,11 @@ public class SiteController {
     private final FilmRepository filmRepository;
     private final StaffRepository staffRepository;
     private final UserRepository userRepository;
+    private final WaitingUserRepository waitingUserRepository;
     private final UserService userService = new UserService();
 
     @Autowired
-    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, StaffRepository staffRepository, UserRepository userRepository) {
+    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository) {
         this.actorRepository = actorRepository;
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
@@ -37,6 +40,7 @@ public class SiteController {
         this.filmRepository = filmRepository;
         this.staffRepository = staffRepository;
         this.userRepository = userRepository;
+        this.waitingUserRepository = waitingUserRepository;
     }
 
     @GetMapping("/")
@@ -58,11 +62,14 @@ public class SiteController {
     @GetMapping("/search")
     public String goToSearch(Model model) {
         model.addAttribute("film", filmRepository.findAll());
+        model.addAttribute("category", categoryRepository.findAll());
         return "search";
     }
 
     @GetMapping("/customer-request")
-    public String addCustomer(){
+    public String addCustomer(Model model){
+        WaitingUserEntity waitingUserEntity = new WaitingUserEntity();
+        model.addAttribute("customer-request", waitingUserEntity);
         return "add-customer";
     }
 
@@ -90,7 +97,9 @@ public class SiteController {
     }
 
     @GetMapping("/add-user")
-    public String goToAddUser() {
+    public String goToAddUser(Model model) {
+        UserEntity userEntity = new UserEntity();
+        model.addAttribute("customer", userEntity);
         return "add-user";
     }
 
@@ -126,7 +135,9 @@ public class SiteController {
     }
 
     @GetMapping("/add-vhs")
-    public String goToAddVhs() {
+    public String goToAddVhs(Model model) {
+        FilmEntity filmEntity = new FilmEntity();
+        model.addAttribute("film", filmEntity);
         return "add-vhs";
     }
 
@@ -169,13 +180,13 @@ public class SiteController {
 
     @GetMapping("/customer-waiting-list")
     public String goToCustomerWaitingList(Model model) {
-        model.addAttribute("customers", customerRepository.findAll());
+        model.addAttribute("customers-waiting", waitingUserRepository.findAll());
         return "customer-waiting-list";
     }
 
     @GetMapping("/show-staff")
     public String goToStaff(Model model) {
-        model.addAttribute("staff", staffRepository.findAll());
+        model.addAttribute("staff", getStaff(userRepository.findAll()));
         return "show-staff";
     }
 
