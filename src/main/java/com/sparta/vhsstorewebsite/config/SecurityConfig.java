@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
 import javax.sql.DataSource;
 
 @Configuration
@@ -58,17 +57,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .permitAll()
 //                .and()
 //                .rememberMe()
-                ;
-
-//        http.authorizeRequests().antMatchers("/admin").hasRole("STAFF");
-
-
-//            http.authorizeRequests().antMatchers("/search-customer").hasAnyAuthority("ADMIN")
-//                    .antMatchers("/css/**").permitAll()
-//                    .anyRequest().authenticated()
-//                    .and().formLogin().loginPage("/login").permitAll()
-//                    .defaultSuccessUrl("/", true).permitAll()
-//                    .and().exceptionHandling().accessDeniedPage("/access-denied")
-//                    .and().logout();
+        ;
     }
 }
