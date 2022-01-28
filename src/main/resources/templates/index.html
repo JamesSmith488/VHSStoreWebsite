@@ -11,7 +11,7 @@
 <table class="film-table">
     <thead>
     <tr>
-        <th>Film name</th>
+        <th >Film name</th>
         <th>Film description</th>
         <th>Film age rating</th>
     </tr>
@@ -21,7 +21,7 @@
         <td th:text="${film.description}"></td>
         <td th:text="${film.rating}"></td>
 
-        <td><a th:href="@{/reserve/{id}(id=${film.filmId})}">Reserve</a></td>
+        <td><a class="actionButton" th:href="@{/reserve/{id}(id=${film.filmId})}">Reserve</a></td>
     </tr>
 </table>
 <div th:insert="fragments/footer"></div>

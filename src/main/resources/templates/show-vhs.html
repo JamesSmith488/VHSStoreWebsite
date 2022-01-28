@@ -20,15 +20,17 @@
             <td th:text="${film.description}"></td>
             <td th:text="${film.rating}"></td>
 
-            <td><a th:href="@{/reserve/{id}(id=${film.filmId})}">Reserve</a></td>
+            <td><a class="actionButton" th:href="@{/reserve/{id}(id=${film.filmId})}">Reserve</a></td>
         </tr>
 </table>
+<br>
 
-<form class="d-flex">
-    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-    <button th:href="@{/show-vhs}" class="btn btn-outline-success" type="submit">Search</button>
-</form>
-
+<div class="search-container">
+    <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button th:href="@{/show-staff}" class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+</div>
 <div th:insert="fragments/footer :: main"></div>
 </body>
 </html>

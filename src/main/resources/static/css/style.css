@@ -1,5 +1,10 @@
 .titleIMG {
     text-align: center;
+    border-radius: 8px;
+    border: 4px solid #505050;
+}
+.titleImage {
+    text-align: center;
 }
 
 h1,h2 {
@@ -27,6 +32,9 @@ body{
     background: #bcd6ed;
 }
 
+.adminButtons {
+    text-align: center;
+}
 .adminButton {
     border-radius: 8px;
     border: 3px solid #505050;
@@ -52,6 +60,10 @@ body{
 
 .loginForm{
     text-align: center;
+}
+
+.inputLogin {
+    text-align: left;
 }
 
 .loginButton {
@@ -124,5 +136,36 @@ body{
 
 .adminButton:hover {
     color: #8e8e8e;
+    text-decoration: none;
+}
+
+.nav-link:link {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.nav-link:visited {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    color: #ff5e5e;
+    text-decoration: none;
+}
+
+
+.navbar-dropdown-item:link {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.navbar-dropdown-item:visited {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.navbar-dropdown-item:hover {
+    color: #ff5e5e;
     text-decoration: none;
 }
