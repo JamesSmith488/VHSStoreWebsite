@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
 
-                .antMatchers("/", "/index", "/search", "/reserved-vhs", "/about").permitAll()
+                .antMatchers("/", "/index", "/search-by-name", "/search-by-category", "/search-by-actor", "/customer-request", "/search-results", "/about").permitAll()
                 .antMatchers("/css/**").permitAll()
                 .anyRequest().fullyAuthenticated()
                 .and()
@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .failureUrl("/error")
                 .usernameParameter("email")
-                .defaultSuccessUrl("/admin", true)
+                .defaultSuccessUrl("/", true)
                 .permitAll()
                 .and()
                 .exceptionHandling().accessDeniedPage("/error")  // might need to be changed
