@@ -25,19 +25,23 @@ public class SiteController {
     private final FilmActorRepository filmActorRepository;
     private final FilmCategoryRepository filmCategoryRepository;
     private final FilmRepository filmRepository;
+    private final ReservedFilmRepository reservedFilmRepository;
+    private final ReturnedFilmRepository returnedFilmRepository;
     private final StaffRepository staffRepository;
     private final UserRepository userRepository;
     private final WaitingUserRepository waitingUserRepository;
     private final UserService userService = new UserService();
 
     @Autowired
-    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository) {
+    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, ReservedFilmRepository reservedFilmRepository, ReturnedFilmRepository returnedFilmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository) {
         this.actorRepository = actorRepository;
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
         this.filmActorRepository = filmActorRepository;
         this.filmCategoryRepository = filmCategoryRepository;
         this.filmRepository = filmRepository;
+        this.reservedFilmRepository = reservedFilmRepository;
+        this.returnedFilmRepository = returnedFilmRepository;
         this.staffRepository = staffRepository;
         this.userRepository = userRepository;
         this.waitingUserRepository = waitingUserRepository;
