@@ -1,9 +1,6 @@
 package com.sparta.vhsstorewebsite.controllers;
 
-import com.sparta.vhsstorewebsite.entities.CustomerEntity;
-import com.sparta.vhsstorewebsite.entities.FilmEntity;
-import com.sparta.vhsstorewebsite.entities.UserEntity;
-import com.sparta.vhsstorewebsite.entities.WaitingUserEntity;
+import com.sparta.vhsstorewebsite.entities.*;
 import com.sparta.vhsstorewebsite.repositories.*;
 import com.sparta.vhsstorewebsite.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,22 +56,37 @@ public class SiteController {
         return "login";
     }
 
-    @GetMapping("/search")
-    public String goToSearch(Model model) {
+    @GetMapping("/search-by-name")
+    public String goToSearchByName(Model model) {
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("actors",actorRepository.findAll());
 
-        return "search";
+        return "search-by-name";
     }
 
-    @PostMapping("/search-results")
-    public String getSearchResults(@ModelAttribute("filmName") String filmName, Model model) {
+    @GetMapping("/search-by-category")
+    public String goToSearchByCategory(Model model) {
+        model.addAttribute("categories", categoryRepository.findAll());
+        //model.addAttribute("actors",actorRepository.findAll());
+
+        return "search-by-category";
+    }
+
+    @PostMapping("/search-results-by-name")
+    public String getSearchResultsByName(@ModelAttribute("filmName") String filmName, Model model) {
         ArrayList<FilmEntity> foundFilms = new ArrayList<>();
         for (FilmEntity filmEntity : filmRepository.findAll()) {
             if (filmEntity.getTitle().contains(filmName.toUpperCase())) {
                 foundFilms.add(filmEntity);
             }
         }
+        model.addAttribute("searchResults", foundFilms);
+        return "search-results";
+    }
+
+    @PostMapping("/search-results-by-category")
+    public String getSearchResultsByCategory(@ModelAttribute("categoryName") String categoryName, Model model) {
+        List<FilmEntity> foundFilms = getCategoryFilms(categoryName);
         model.addAttribute("searchResults", foundFilms);
         return "search-results";
     }
@@ -219,5 +231,21 @@ public class SiteController {
         return customers;
     }
 
-
+    private List<FilmEntity> getCategoryFilms(String categoryName) {
+        List<CategoryEntity> categories = categoryRepository.findByName(categoryName);
+        List<FilmCategoryEntity> filmCategories = filmCategoryRepository.findAll();
+        List<FilmEntity> categorySortedFilms = new ArrayList<>();
+        List <CategoryEntity> temp = new ArrayList<>();
+        for (CategoryEntity category: categories) {
+            if (category.getName().equals(categoryName)) {
+                temp.add(category);
+            }
+            for (FilmCategoryEntity filmCategory : filmCategories) {
+                if (category.getCategoryId().equals(filmCategory.getCategoryId())) {
+                    categorySortedFilms.add(filmRepository.findById(filmCategory.getFilmId()).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID ")));
+                }
+            }
+        }
+        return categorySortedFilms;
+    }
 }
