@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,14 +17,14 @@
         <th>Address</th>
     </tr>
     </thead>
-    <tr th:each="customer-waiting : ${customers-waiting}">
-        <td th:text="${customer-waiting.firstName}"></td>
-        <td th:text="${customer-waiting.lastName}"></td>
-        <td th:text="${customer-waiting.email}"></td>
-        <td th:text="${customer-waiting.address}"></td>
+    <tr th:each="waiting : ${waitings}">
+        <td th:text="${waiting.firstName}"></td>
+        <td th:text="${waiting.lastName}"></td>
+        <td th:text="${waiting.email}"></td>
+        <td th:text="${waiting.storeAddress}"></td>
 
-        <td><a th:href="@{/accept/{id}(id=${customer-waiting.id})}">Accept</a></td>
-        <td><a th:href="@{/reject/{id}(id=${customer-waiting.id})}">Reject</a></td>
+        <td><a th:href="@{/accept/{id}(id=${waiting.userId})}">Accept</a></td>
+        <td><a th:href="@{/reject/{id}(id=${waiting.userId})}">Reject</a></td>
     </tr>
 </table>
 
