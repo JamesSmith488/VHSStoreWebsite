@@ -20,10 +20,10 @@ public class VhsStoreWebsiteApplication {
     @Bean
     public CommandLineRunner demo(UserRepository userRepository){
         return args -> {
-            userRepository.save(new UserEntity(1, "jack", "jackathon" ,  "email",
+            userRepository.save(new UserEntity(1, "jack", "jackathon" ,  "staffEmail",
                     "skegness",encoder.encode("password"), "STAFF", 1));
-            userRepository.save(new UserEntity(2, "john", "johnathan" ,  "yes",
-                    "skegness",encoder.encode("passwordjohn"), "CUSTOMER", 1));
+            userRepository.save(new UserEntity(2, "john", "johnathan" ,  "customerEmail",
+                    "skegness",encoder.encode("password"), "CUSTOMER", 1));
         };
     }
 }
