@@ -86,8 +86,14 @@ public class SiteController {
     @GetMapping("/customer-request")
     public String addCustomer(Model model){
         WaitingUserEntity waitingUserEntity = new WaitingUserEntity();
-        model.addAttribute("customer-request", waitingUserEntity);
-        return "add-customer";
+        model.addAttribute("customer", waitingUserEntity);
+        return "customer-request";
+    }
+
+    @PostMapping("/save-customer-request")
+    public String saveCustomerRequest(@ModelAttribute("user") WaitingUserEntity entity){
+        waitingUserRepository.save(entity);
+        return "index";
     }
 
     @GetMapping("/reserved-vhs")
@@ -197,7 +203,7 @@ public class SiteController {
 
     @GetMapping("/customer-waiting-list")
     public String goToCustomerWaitingList(Model model) {
-        model.addAttribute("customers-waiting", waitingUserRepository.findAll());
+        model.addAttribute("waitings", waitingUserRepository.findAll());
         return "customer-waiting-list";
     }
 
