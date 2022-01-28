@@ -40,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/", "/index", "/search-by-name", "/search-by-category", "/search-by-actor", "/customer-request", "/search-results-by-name", "/search-results-by-category", "/search-results-by-actor", "/about").permitAll()
                 .antMatchers("/css/**").permitAll()
-                .anyRequest().fullyAuthenticated()
+//                .antMatchers("/admin").hasAuthority("STAFF")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -58,5 +59,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
 //                .rememberMe()
                 ;
+
+//        http.authorizeRequests().antMatchers("/admin").hasRole("STAFF");
+
+
+//            http.authorizeRequests().antMatchers("/search-customer").hasAnyAuthority("ADMIN")
+//                    .antMatchers("/css/**").permitAll()
+//                    .anyRequest().authenticated()
+//                    .and().formLogin().loginPage("/login").permitAll()
+//                    .defaultSuccessUrl("/", true).permitAll()
+//                    .and().exceptionHandling().accessDeniedPage("/access-denied")
+//                    .and().logout();
     }
 }
