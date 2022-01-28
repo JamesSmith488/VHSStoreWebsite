@@ -8,21 +8,17 @@
 <div th:insert="fragments/header"></div>
 
 <div class="search-bar">
-    <form th:action="@{search-results}" method="post">
+    <form th:action="@{search-results-by-category}" method="post">
 
-        <label>Film name:</label>
-        <input type="text" name="filmName"/>
-
-        <label> Actor: </label>
-        <input type="text" name="actorName">
+<!--        <label>Film name:</label>-->
+<!--        <input type="text" name="filmName"/>-->
 
         <label> Category: </label>
         <select th:field="*{categories}">
-            <option value="">All</option>
             <option th:each="category : ${categories}"
-                    th:value="${category_id}"
-                    th:text="${category.name}">
-
+                    th:value="${category.name}"
+                    th:text="${category.name}"
+                    >
             </option>
         </select>
 
