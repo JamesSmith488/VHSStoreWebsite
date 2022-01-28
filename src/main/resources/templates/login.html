@@ -6,15 +6,15 @@
 </head>
 <body>
 <div th:insert="fragments/header"></div>
-
+<br>
 <form class="loginForm" th:action="@{/login}" method="post"><br>
-    <label>Email  <input class="inputLogin" type="text" name="email"/></label>
-    <label>Password  <input class="inputLogin" type="password" name="password"/></label>
+    <label><input class="inputLogin" type="text" name="email" placeholder="Email"/></label><br><br>
+    <label><input class="inputLogin" type="password" name="password" placeholder="Password"/></label><br><br>
 
     <input type="checkbox" id="remember-me" name="remember-me">
-    <label for="remember-me">Remember me</label><br>
+    <label for="remember-me">Remember me</label><br><br>
 
-    <button class="loginButton" type="submit" value="Sign in">Sign in</button>
+    <button class="loginButton" type="submit" value="Sign in">Sign in</button><br><br>
     <a class="loginExtraButton" th:href="@{/customer-request}">Sign up</a>
     <a class="loginExtraButton" th:href="@{/}">Cancel</a><br><br/>
 </form>

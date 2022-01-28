@@ -7,14 +7,19 @@
 </head>
 <body>
 <div th:insert="fragments/header"></div>
-<h2>Please select an admin task:</h2><br/>
-<a class="adminButton" th:href="@{/add-vhs}">Add VHS</a><br><br/>
-<a class="adminButton" th:href="@{/add-user}">Add User</a><br><br/>
-<a class="adminButton" th:href="@{/show-staff}">Show Staff</a><br><br/>
-<a class="adminButton" th:href="@{/show-vhs}">Show VHS</a><br><br/>
-<a class="adminButton" th:href="@{/show-customers}">Show Customers</a><br><br/>
-<a class="adminButton" th:href="@{/customer-waiting-list}">Show Waiting Customers</a><br><br/>
-<a class="adminButton" th:href="@{/reserved-vhs}">Show Currently Rented</a><br><br/>
+
+<div class="adminButtons">
+    <h2>Please select an admin task:</h2><br/>
+    <a class="adminButton" th:href="@{/add-vhs}">Add VHS</a>
+    <a class="adminButton" th:href="@{/add-user}">Add User</a><br><br/>
+
+    <a class="adminButton" th:href="@{/show-vhs}">Show VHS</a>
+    <a class="adminButton" th:href="@{/show-staff}">Show Staff</a>
+    <a class="adminButton" th:href="@{/show-customers}">Show Customers</a><br><br/>
+
+    <a class="adminButton" th:href="@{/reserved-vhs}">Show Currently Rented</a>
+    <a class="adminButton" th:href="@{/customer-waiting-list}">Show Waiting Customers</a><br><br/>
+</div>
 <div th:insert="fragments/footer :: main"></div>
 </body>
 </html>
