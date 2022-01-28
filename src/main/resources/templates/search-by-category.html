@@ -9,12 +9,8 @@
 
 <div class="search-bar">
     <form th:action="@{search-results-by-category}" method="post">
-
-<!--        <label>Film name:</label>-->
-<!--        <input type="text" name="filmName"/>-->
-
         <label> Category: </label>
-        <select th:field="*{categories}">
+        <select th:class="form-control" th:id="categoryName" th:name="categoryName">
             <option th:each="category : ${categories}"
                     th:value="${category.name}"
                     th:text="${category.name}"
