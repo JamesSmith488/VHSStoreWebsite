@@ -24,9 +24,9 @@ public class FilmEntity {
     @Basic
     @Column(name = "language_id")
     private Integer languageId;
-//    @Basic
-//    @Column(name = "original_language_id")
-//    private Integer originalLanguageId;
+    @Basic
+    @Column(name = "original_language_id")
+    private String originalLanguageId;
     @Basic
     @Column(name = "rental_duration")
     private Integer rentalDuration;
@@ -48,6 +48,9 @@ public class FilmEntity {
     @Basic
     @Column(name = "last_update")
     private Timestamp lastUpdate;
+    @Basic
+    @Column(name = "availability")
+    private boolean availability;
 
     public Integer getFilmId() {
         return filmId;
@@ -89,11 +92,11 @@ public class FilmEntity {
         this.languageId = languageId;
     }
 
-//    public Object getOriginalLanguageId() {
+//    public Integer getOriginalLanguageId() {
 //        return originalLanguageId;
 //    }
 //
-//    public void setOriginalLanguageId(Object originalLanguageId) {
+//    public void setOriginalLanguageId(Integer originalLanguageId) {
 //        this.originalLanguageId = originalLanguageId;
 //    }
 
@@ -153,16 +156,24 @@ public class FilmEntity {
         this.lastUpdate = lastUpdate;
     }
 
+    public boolean getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FilmEntity that = (FilmEntity) o;
-        return Objects.equals(filmId, that.filmId) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(releaseYear, that.releaseYear) && Objects.equals(languageId, that.languageId)  && Objects.equals(rentalDuration, that.rentalDuration) && Objects.equals(rentalRate, that.rentalRate) && Objects.equals(length, that.length) && Objects.equals(replacementCost, that.replacementCost) && Objects.equals(rating, that.rating) && Objects.equals(specialFeatures, that.specialFeatures) && Objects.equals(lastUpdate, that.lastUpdate);
+        return availability == that.availability && Objects.equals(filmId, that.filmId) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(releaseYear, that.releaseYear) && Objects.equals(languageId, that.languageId) && Objects.equals(originalLanguageId, that.originalLanguageId) && Objects.equals(rentalDuration, that.rentalDuration) && Objects.equals(rentalRate, that.rentalRate) && Objects.equals(length, that.length) && Objects.equals(replacementCost, that.replacementCost) && Objects.equals(rating, that.rating) && Objects.equals(specialFeatures, that.specialFeatures) && Objects.equals(lastUpdate, that.lastUpdate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(filmId, title, description, releaseYear, languageId, rentalDuration, rentalRate, length, replacementCost, rating, specialFeatures, lastUpdate);
+        return Objects.hash(filmId, title, description, releaseYear, languageId, originalLanguageId, rentalDuration, rentalRate, length, replacementCost, rating, specialFeatures, lastUpdate, availability);
     }
 }
