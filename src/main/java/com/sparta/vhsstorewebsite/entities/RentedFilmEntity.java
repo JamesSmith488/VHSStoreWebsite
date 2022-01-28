@@ -1,15 +1,13 @@
 package com.sparta.vhsstorewebsite.entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-public class ReturnedFilmEntity {
-
+public class RentedFilmEntity {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Integer filmId;
     @Basic
@@ -146,7 +144,7 @@ public class ReturnedFilmEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ReturnedFilmEntity that = (ReturnedFilmEntity) o;
+        RentedFilmEntity that = (RentedFilmEntity) o;
         return Objects.equals(filmId, that.filmId) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(releaseYear, that.releaseYear) && Objects.equals(languageId, that.languageId) && Objects.equals(rentalDuration, that.rentalDuration) && Objects.equals(rentalRate, that.rentalRate) && Objects.equals(length, that.length) && Objects.equals(replacementCost, that.replacementCost) && Objects.equals(rating, that.rating) && Objects.equals(specialFeatures, that.specialFeatures) && Objects.equals(lastUpdate, that.lastUpdate);
     }
 
