@@ -14,7 +14,7 @@
         <th>Film age rating</th>
     </tr>
     </thead>
-        <tr th:each="film : ${films}">
+        <tr th:each="film : ${reservedFilms}">
             <td th:text="${film.title}"></td>
             <td th:text="${film.description}"></td>
             <td th:text="${film.rating}"></td>

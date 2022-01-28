@@ -22,19 +22,23 @@ public class SiteController {
     private final FilmActorRepository filmActorRepository;
     private final FilmCategoryRepository filmCategoryRepository;
     private final FilmRepository filmRepository;
+    private final ReservedFilmRepository reservedFilmRepository;
+    private final RentedFilmRepository rentedFilmRepository;
     private final StaffRepository staffRepository;
     private final UserRepository userRepository;
     private final WaitingUserRepository waitingUserRepository;
     private final UserService userService = new UserService();
 
     @Autowired
-    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository) {
+    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, ReservedFilmRepository reservedFilmRepository, RentedFilmRepository rentedFilmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository) {
         this.actorRepository = actorRepository;
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
         this.filmActorRepository = filmActorRepository;
         this.filmCategoryRepository = filmCategoryRepository;
         this.filmRepository = filmRepository;
+        this.reservedFilmRepository = reservedFilmRepository;
+        this.rentedFilmRepository = rentedFilmRepository;
         this.staffRepository = staffRepository;
         this.userRepository = userRepository;
         this.waitingUserRepository = waitingUserRepository;
@@ -106,7 +110,7 @@ public class SiteController {
 
     @GetMapping("/reserved-vhs")
     public String goToReservedVhs(Model model) {
-        model.addAttribute("films", filmRepository.findAll());
+        model.addAttribute("reservedFilms", reservedFilmRepository.findAll());
         return "reserved-vhs";
     }
 
@@ -205,7 +209,7 @@ public class SiteController {
 
     @GetMapping("/rented")
     public String goToRented(Model model) {
-        model.addAttribute("films", filmRepository.findAll());
+        model.addAttribute("rentedFilms", rentedFilmRepository.findAll());
         return "rented";
     }
 
