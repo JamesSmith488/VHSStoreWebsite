@@ -35,6 +35,26 @@ public class RentedFilmEntity {
     private String specialFeatures;
     @Basic
     private Timestamp lastUpdate;
+    @Basic
+    private String userName;
+
+    public RentedFilmEntity() {
+    }
+
+    public RentedFilmEntity(Integer filmId, String title, String description, Integer releaseYear, Integer languageId, Integer rentalDuration, BigDecimal rentalRate, Integer length, BigDecimal replacementCost, String rating, String specialFeatures, Timestamp lastUpdate) {
+        this.filmId = filmId;
+        this.title = title;
+        this.description = description;
+        this.releaseYear = releaseYear;
+        this.languageId = languageId;
+        this.rentalDuration = rentalDuration;
+        this.rentalRate = rentalRate;
+        this.length = length;
+        this.replacementCost = replacementCost;
+        this.rating = rating;
+        this.specialFeatures = specialFeatures;
+        this.lastUpdate = lastUpdate;
+    }
 
     public Integer getFilmId() {
         return filmId;

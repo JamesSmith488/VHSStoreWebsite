@@ -2,14 +2,14 @@ package com.sparta.vhsstorewebsite.controllers;
 
 import com.sparta.vhsstorewebsite.entities.*;
 import com.sparta.vhsstorewebsite.repositories.*;
+import com.sparta.vhsstorewebsite.services.FilmService;
 import com.sparta.vhsstorewebsite.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,7 @@ public class SiteController {
     private final UserRepository userRepository;
     private final WaitingUserRepository waitingUserRepository;
     private final UserService userService = new UserService();
+    private final FilmService filmService = new FilmService();
 
     @Autowired
     public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, ReservedFilmRepository reservedFilmRepository, RentedFilmRepository rentedFilmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository) {
@@ -120,6 +121,21 @@ public class SiteController {
     public String saveCustomerRequest(@ModelAttribute("user") WaitingUserEntity entity){
         waitingUserRepository.save(entity);
         return "index";
+    }
+
+    @GetMapping("/reserve/{id}")
+    public String reserveVhs(@PathVariable("id") Integer id){
+        ReservedFilmEntity reservedFilmEntity = filmService.convertToReservation(filmRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)));
+        reservedFilmRepository.save(reservedFilmEntity);
+        return "reserved-vhs";
+    }
+
+    @GetMapping("/remove/{id}")
+    public String removeReservedVhs(@PathVariable("id") Integer id){
+        ReservedFilmEntity reservedFilmEntity = reservedFilmRepository.getById(id);
+        reservedFilmRepository.delete(reservedFilmEntity);
+        return "reserved-vhs";
     }
 
     @GetMapping("/reserved-vhs")
