@@ -130,12 +130,14 @@ public class SiteController {
     public String reserveVhs(@PathVariable("id") Integer id){
         ReservedFilmEntity reservedFilmEntity = filmService.convertToReservation(filmRepository.findById(id).
                 orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)));
+        filmRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)).setAvailability(false);
         reservedFilmRepository.save(reservedFilmEntity);
         return "reserved-vhs";
     }
 
     @GetMapping("/remove/{id}")
     public String removeReservedVhs(@PathVariable("id") Integer id){
+        filmRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)).setAvailability(true);
         ReservedFilmEntity reservedFilmEntity = reservedFilmRepository.getById(id);
         reservedFilmRepository.delete(reservedFilmEntity);
         return "reserved-vhs";
@@ -160,7 +162,7 @@ public class SiteController {
 
     @GetMapping("/show-vhs")
     public String getAllVhs(Model model) {
-        model.addAttribute("films", filmRepository.findAll());
+        model.addAttribute("films", filmRepository.findAllByAvailabilityTrue());
         return "show-vhs";
     }
 

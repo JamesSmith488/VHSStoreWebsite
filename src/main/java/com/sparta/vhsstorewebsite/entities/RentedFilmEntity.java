@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 public class RentedFilmEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
     private Integer filmId;
     @Basic
