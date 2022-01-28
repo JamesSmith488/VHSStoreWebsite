@@ -60,6 +60,9 @@ public class SiteController {
         return "login";
     }
 
+    @GetMapping("/login-failed")
+    public String goToLoginFailed() {return "login-failed";}
+
     @GetMapping("/search-by-name")
     public String goToSearchByName(Model model) {
         model.addAttribute("categories", categoryRepository.findAll());
