@@ -19,10 +19,10 @@
             <td th:text="${customer.firstName}"></td>
             <td th:text="${customer.lastName}"></td>
             <td th:text="${customer.email}"></td>
-            <td th:text="${customer.address}"></td>
+            <td th:text="${customer.storeAddress}"></td>
 
-            <td><a th:href="@{/delete/{id}(id=${customer.id})}">delete</a></td>
-            <td><a th:href="@{/edit/{id}(id=${customer.id})}">edit</a></td>
+            <td><a th:href="@{/delete/{id}(id=${customer.userId})}">delete</a></td>
+            <td><a th:href="@{/edit/{id}(id=${customer.userId})}">edit</a></td>
         </tr>
 </table>
 
