@@ -44,12 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .failureUrl("/error")
+                .failureUrl("/login-failed")
                 .usernameParameter("email")
                 .defaultSuccessUrl("/", true)
                 .permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/error")  // might need to be changed
+                .exceptionHandling().accessDeniedPage("/login-failed")  // might need to be changed
                 .and()
                 .logout()
 //                .logoutUrl("login")

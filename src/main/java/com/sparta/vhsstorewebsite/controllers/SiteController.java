@@ -2,14 +2,14 @@ package com.sparta.vhsstorewebsite.controllers;
 
 import com.sparta.vhsstorewebsite.entities.*;
 import com.sparta.vhsstorewebsite.repositories.*;
+import com.sparta.vhsstorewebsite.services.FilmService;
 import com.sparta.vhsstorewebsite.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,7 @@ public class SiteController {
     private final UserRepository userRepository;
     private final WaitingUserRepository waitingUserRepository;
     private final UserService userService = new UserService();
+    private final FilmService filmService = new FilmService();
 
     @Autowired
     public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, ReservedFilmRepository reservedFilmRepository, RentedFilmRepository rentedFilmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository) {
@@ -46,7 +47,8 @@ public class SiteController {
 
     @GetMapping("/")
     public String goHome(Model model) {
-        model.addAttribute("films", filmRepository.findAll());
+        filmRepository.findAllByAvailabilityTrue();
+        model.addAttribute("films", filmRepository.findAllByAvailabilityTrue());
         return "index";
     }
 
@@ -60,11 +62,13 @@ public class SiteController {
         return "login";
     }
 
+    @GetMapping("/login-failed")
+    public String goToLoginFailed() {return "login-failed";}
+
     @GetMapping("/search-by-name")
     public String goToSearchByName(Model model) {
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("actors",actorRepository.findAll());
-
         return "search-by-name";
     }
 
@@ -87,7 +91,7 @@ public class SiteController {
     @PostMapping("/search-results-by-name")
     public String getSearchResultsByName(@ModelAttribute("filmName") String filmName, Model model) {
         ArrayList<FilmEntity> foundFilms = new ArrayList<>();
-        for (FilmEntity filmEntity : filmRepository.findAll()) {
+        for (FilmEntity filmEntity : filmRepository.findAllByAvailabilityTrue()) {
             if (filmEntity.getTitle().contains(filmName.toUpperCase())) {
                 foundFilms.add(filmEntity);
             }
@@ -120,6 +124,21 @@ public class SiteController {
     public String saveCustomerRequest(@ModelAttribute("user") WaitingUserEntity entity){
         waitingUserRepository.save(entity);
         return "index";
+    }
+
+    @GetMapping("/reserve/{id}")
+    public String reserveVhs(@PathVariable("id") Integer id){
+        ReservedFilmEntity reservedFilmEntity = filmService.convertToReservation(filmRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)));
+        reservedFilmRepository.save(reservedFilmEntity);
+        return "reserved-vhs";
+    }
+
+    @GetMapping("/remove/{id}")
+    public String removeReservedVhs(@PathVariable("id") Integer id){
+        ReservedFilmEntity reservedFilmEntity = reservedFilmRepository.getById(id);
+        reservedFilmRepository.delete(reservedFilmEntity);
+        return "reserved-vhs";
     }
 
     @GetMapping("/reserved-vhs")
@@ -259,10 +278,13 @@ public class SiteController {
         List<CategoryEntity> categories = categoryRepository.findByName(categoryName);
         List<FilmCategoryEntity> filmCategories = filmCategoryRepository.findAll();
         List<FilmEntity> categorySortedFilms = new ArrayList<>();
+        List<FilmEntity> availableFilms = filmRepository.findAllByAvailabilityTrue();
         for (CategoryEntity category: categories) {
             for (FilmCategoryEntity filmCategory : filmCategories) {
                 if (category.getCategoryId().equals(filmCategory.getCategoryId())) {
-                    categorySortedFilms.add(filmRepository.findById(filmCategory.getFilmId()).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID ")));
+                    if (availableFilms.get(filmCategory.getFilmId()).getAvailability()) {
+                        categorySortedFilms.add(filmRepository.findById(filmCategory.getFilmId()).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID")));
+                    }
                 }
             }
         }
@@ -273,10 +295,13 @@ public class SiteController {
         List<ActorEntity> searchedActorList = actorRepository.findByFirstNameContainsAndLastNameContains(firstName, lastName);
         List<FilmActorEntity> linkedActorFilmList = filmActorRepository.findAll();
         List<FilmEntity> actorSortedFilms = new ArrayList<>();
+        List<FilmEntity> availableFilms = filmRepository.findAllByAvailabilityTrue();
         for (ActorEntity actor : searchedActorList) {
             for (FilmActorEntity filmActor : linkedActorFilmList) {
                 if (actor.getActorId().equals(filmActor.getActorId())) {
-                    actorSortedFilms.add(filmRepository.findById(filmActor.getFilmId()).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID ")));
+                    if (availableFilms.get(filmActor.getFilmId()).getAvailability()) {
+                        actorSortedFilms.add(filmRepository.findById(filmActor.getFilmId()).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID")));
+                    }
                 }
             }
         }
