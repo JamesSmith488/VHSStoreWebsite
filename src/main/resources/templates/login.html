@@ -7,18 +7,17 @@
 <body>
 <div th:insert="fragments/header"></div>
 
-<form class="loginForm" th:action="@{/login}" method="post"><p/><br>
-    <input class="inputLogin" type="Username" placeholder="Username"/><br><p/>
-    <input class="inputLogin" type="Password" placeholder="Password"/><br><p/>
+<form class="loginForm" th:action="@{/login}" method="post"><br>
+    <label>Email  <input class="inputLogin" type="text" name="email"/></label>
+    <label>Password  <input class="inputLogin" type="password" name="password"/></label>
 
     <input type="checkbox" id="remember-me" name="remember-me">
-    <label for="remember-me">Remember me</label><br><p/>
+    <label for="remember-me">Remember me</label><br>
 
-    <button class="loginButton" type="submit" value="Sign in">Sign in</button><p/>
+    <button class="loginButton" type="submit" value="Sign in">Sign in</button>
     <a class="loginExtraButton" th:href="@{/customer-request}">Sign up</a>
     <a class="loginExtraButton" th:href="@{/}">Cancel</a><br><br/>
 </form>
-
 
 <div th:insert="fragments/footer :: main"></div>
 </body>
