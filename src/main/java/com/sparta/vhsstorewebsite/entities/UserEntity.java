@@ -16,11 +16,12 @@ public class UserEntity {
     private String storeAddress;
     private String password;
     private String role;
+    private Integer userEnabled;
 
     public UserEntity() {
     }
 
-    public UserEntity(Integer userId, String firstName, String lastName, String email, String storeAddress, String password, String role) {
+    public UserEntity(Integer userId, String firstName, String lastName, String email, String storeAddress, String password, String role, Integer userEnabled) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,6 +29,7 @@ public class UserEntity {
         this.storeAddress = storeAddress;
         this.password = password;
         this.role = role;
+        this.userEnabled = userEnabled;
     }
 
     public Integer getUserId() {
@@ -86,16 +88,24 @@ public class UserEntity {
         this.role = role;
     }
 
+    public Integer getUserEnabled() {
+        return userEnabled;
+    }
+
+    public void setUserEnabled(Integer userEnabled) {
+        this.userEnabled = userEnabled;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
-        return Objects.equals(userId, that.userId) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(storeAddress, that.storeAddress) && Objects.equals(password, that.password) && Objects.equals(role, that.role);
+        return Objects.equals(userId, that.userId) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(storeAddress, that.storeAddress) && Objects.equals(password, that.password) && Objects.equals(role, that.role) && Objects.equals(userEnabled, that.userEnabled);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, firstName, lastName, email, storeAddress, password, role);
+        return Objects.hash(userId, firstName, lastName, email, storeAddress, password, role, userEnabled);
     }
 }
