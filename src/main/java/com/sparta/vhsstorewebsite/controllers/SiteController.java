@@ -47,7 +47,8 @@ public class SiteController {
 
     @GetMapping("/")
     public String goHome(Model model) {
-        model.addAttribute("films", filmRepository.findAll());
+        filmRepository.findAllByAvailabilityTrue();
+        model.addAttribute("films", filmRepository.findAllByAvailabilityTrue());
         return "index";
     }
 
@@ -68,7 +69,6 @@ public class SiteController {
     public String goToSearchByName(Model model) {
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("actors",actorRepository.findAll());
-
         return "search-by-name";
     }
 
@@ -91,7 +91,7 @@ public class SiteController {
     @PostMapping("/search-results-by-name")
     public String getSearchResultsByName(@ModelAttribute("filmName") String filmName, Model model) {
         ArrayList<FilmEntity> foundFilms = new ArrayList<>();
-        for (FilmEntity filmEntity : filmRepository.findAll()) {
+        for (FilmEntity filmEntity : filmRepository.findAllByAvailabilityTrue()) {
             if (filmEntity.getTitle().contains(filmName.toUpperCase())) {
                 foundFilms.add(filmEntity);
             }
@@ -278,10 +278,13 @@ public class SiteController {
         List<CategoryEntity> categories = categoryRepository.findByName(categoryName);
         List<FilmCategoryEntity> filmCategories = filmCategoryRepository.findAll();
         List<FilmEntity> categorySortedFilms = new ArrayList<>();
+        List<FilmEntity> availableFilms = filmRepository.findAllByAvailabilityTrue();
         for (CategoryEntity category: categories) {
             for (FilmCategoryEntity filmCategory : filmCategories) {
                 if (category.getCategoryId().equals(filmCategory.getCategoryId())) {
-                    categorySortedFilms.add(filmRepository.findById(filmCategory.getFilmId()).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID ")));
+                    if (availableFilms.get(filmCategory.getFilmId()).getAvailability()) {
+                        categorySortedFilms.add(filmRepository.findById(filmCategory.getFilmId()).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID")));
+                    }
                 }
             }
         }
@@ -292,10 +295,13 @@ public class SiteController {
         List<ActorEntity> searchedActorList = actorRepository.findByFirstNameContainsAndLastNameContains(firstName, lastName);
         List<FilmActorEntity> linkedActorFilmList = filmActorRepository.findAll();
         List<FilmEntity> actorSortedFilms = new ArrayList<>();
+        List<FilmEntity> availableFilms = filmRepository.findAllByAvailabilityTrue();
         for (ActorEntity actor : searchedActorList) {
             for (FilmActorEntity filmActor : linkedActorFilmList) {
                 if (actor.getActorId().equals(filmActor.getActorId())) {
-                    actorSortedFilms.add(filmRepository.findById(filmActor.getFilmId()).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID ")));
+                    if (availableFilms.get(filmActor.getFilmId()).getAvailability()) {
+                        actorSortedFilms.add(filmRepository.findById(filmActor.getFilmId()).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID")));
+                    }
                 }
             }
         }
