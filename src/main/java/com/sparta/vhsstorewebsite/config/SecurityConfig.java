@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/", "/index", "/search-by-name", "/search-by-category", "/search-by-actor", "/customer-request", "/search-results-by-name", "/search-results-by-category", "/search-results-by-actor", "/about").permitAll()
                 .antMatchers("/css/**").permitAll()
-//                .antMatchers("/admin").hasAuthority("STAFF")
+                .antMatchers("/admin").hasAuthority("STAFF")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
