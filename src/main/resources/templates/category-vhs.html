@@ -21,7 +21,7 @@
 
 <!--        <td th:text="${users.findByUserId(userLink.findByFilmId(film.filmId).userId).get(0).getEmail()}"></td>-->
 
-        <td><a th:href="@{/remove/{id}(id=${film.filmId})}">Edit</a></td>
+        <td><a th:href="@{/category/{id}(id=${film.filmId})}">Change category</a></td>
     </tr>
 </table>
 <form th:action="@{edit-category}" method="post">
