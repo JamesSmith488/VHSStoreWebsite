@@ -18,9 +18,6 @@ public class RentedFilmEntity {
     private Integer releaseYear;
     @Basic
     private Integer languageId;
-    //    @Basic
-//    @Column(name = "original_language_id")
-//    private Integer originalLanguageId;
     @Basic
     private Integer rentalDuration;
     @Basic

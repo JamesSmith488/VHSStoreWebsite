@@ -11,5 +11,4 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Intege
 
     List<CategoryEntity> findByName(String categoryName);
 
-
 }

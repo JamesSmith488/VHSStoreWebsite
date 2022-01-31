@@ -16,7 +16,6 @@ public class VhsStoreWebsiteApplication {
         SpringApplication.run(VhsStoreWebsiteApplication.class, args);
     }
 
-
     @Bean
     public CommandLineRunner demo(UserRepository userRepository){
         return args -> {

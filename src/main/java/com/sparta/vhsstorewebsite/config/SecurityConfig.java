@@ -52,11 +52,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().accessDeniedPage("/login-failed")  // might need to be changed
                 .and()
                 .logout()
-//                .logoutUrl("login")
-//                .deleteCookies("remember-me")
-//                .permitAll()
-//                .and()
-//                .rememberMe()
         ;
     }
 }
