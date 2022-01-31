@@ -13,4 +13,6 @@ public interface FilmCategoryRepository extends JpaRepository<FilmCategoryEntity
 
     FilmCategoryEntity findByFilmId(Integer id);
 
+    FilmCategoryEntity findByFilmIdAndCategoryId(Integer filmId, Integer categoryId);
+
 }
