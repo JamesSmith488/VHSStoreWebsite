@@ -23,7 +23,7 @@
         <td th:text="${film.lastUpdate}"></td>
         <td th:text="${film.rentalDuration}"></td>
         <td th:text="${film.replacementCost}"></td>
-        <td><a th:href="@{/return/{id}(id=${film.filmId})}">edit</a></td>
+        <td><a th:href="@{/return/{id}(id=${film.filmId})}">Return film</a></td>
     </tr>
 </table>
 <div th:insert="fragments/footer :: main"></div>
