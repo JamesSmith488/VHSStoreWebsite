@@ -150,6 +150,23 @@ public class SiteController {
         return "reserved-vhs";
     }
 
+    @GetMapping("/category/{id}")
+    public String addCategoryVhs(@PathVariable("id") Integer id, Model model){
+       // filmRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)).setAvailability(false);
+        Integer categoryId = filmCategoryRepository.findByFilmId(id).getCategoryId();
+//        getFilmCategory(id, categoryId);
+        //filmCategoryRepository.save(new FilmCategoryEntity(Id, ));
+        model.addAttribute("reservedFilms", userReservedRepository.findByFilmId(id));
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "category-vhs";
+    }
+
+//    @GetMapping("/category")
+//    public String goToEditCategoryPage(Model model) {
+//        model.addAttribute("category", categoryRepository);
+//        return "/category";
+//    }
+
     @GetMapping("/reserved-vhs")
     public String goToReservedVhs(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -344,6 +361,11 @@ public class SiteController {
         return categorySortedFilms;
     }
 
+    private void getFilmCategory(Integer filmId, Integer categoryId) {
+        FilmCategoryEntity filmCategory = filmCategoryRepository.findByFilmId(filmId);
+        filmCategory.setCategoryId(categoryId);
+    }
+
     private List<FilmEntity> getActorFilms(String firstName, String lastName) {
         List<ActorEntity> searchedActorList = actorRepository.findByFirstNameContainsAndLastNameContains(firstName, lastName);
         List<FilmActorEntity> linkedActorFilmList = filmActorRepository.findAll();
@@ -384,5 +406,4 @@ public class SiteController {
         }
         return null;
     }
-
 }
