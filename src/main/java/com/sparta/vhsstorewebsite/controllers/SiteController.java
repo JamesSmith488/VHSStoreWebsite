@@ -168,7 +168,7 @@ public class SiteController {
 
     @GetMapping("/show-customers")
     public String getAllCustomers(Model model) {
-        model.addAttribute("customers", getCustomers(userRepository.findAll()));
+        model.addAttribute("customers", userRepository.findByRole("CUSTOMER"));
         return "show-customers";
     }
 
@@ -298,7 +298,7 @@ public class SiteController {
 
     @GetMapping("/show-staff")
     public String goToStaff(Model model) {
-        model.addAttribute("staff", getStaff(userRepository.findAll()));
+        model.addAttribute("staff", userRepository.findByRole("STAFF"));
         return "show-staff";
     }
 
@@ -309,22 +309,6 @@ public class SiteController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return "redirect:/";
-    }
-
-    private List<UserEntity> getStaff(List<UserEntity> allUsers){
-        List<UserEntity> staff = new ArrayList<>();
-        for (UserEntity e: allUsers) {
-            if (e.getRole().equals("STAFF")) staff.add(e);
-        }
-        return staff;
-    }
-
-    private List<UserEntity> getCustomers(List<UserEntity> allUsers){
-        List<UserEntity> customers = new ArrayList<>();
-        for (UserEntity e: allUsers) {
-            if (e.getRole().equals("CUSTOMER")) customers.add(e);
-        }
-        return customers;
     }
 
     private List<FilmEntity> getCategoryFilms(String categoryName) {
