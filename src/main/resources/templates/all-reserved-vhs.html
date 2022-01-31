@@ -10,6 +10,7 @@
     <thead>
     <tr>
         <th>Film name</th>
+        <th>Reserved By</th>
         <th>Film description</th>
         <th>Film age rating</th>
         <th>Remove</th>
@@ -18,6 +19,7 @@
     </thead>
     <tr th:each="film : ${reservedFilms}">
         <td th:text="${film.title}"></td>
+        <td th:text="${users.findByUserId(userLink.findByFilmId(film.filmId).userId).get(0).getEmail()}"></td>
         <td th:text="${film.description}"></td>
         <td th:text="${film.rating}"></td>
 

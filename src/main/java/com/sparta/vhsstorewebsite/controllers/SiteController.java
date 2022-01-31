@@ -180,11 +180,8 @@ public class SiteController {
 
     @GetMapping("/all-reserved-vhs")
     public String goToAllReservedVhs(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Integer userId = getUserIdFromName(authentication.getName());
-//        boolean isStaff = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("STAFF"));
-//        if (isStaff) model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findAll()));
-//        else model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findByUserId(userId)));
+        model.addAttribute("users", userRepository);
+        model.addAttribute("userLink", userReservedRepository);
         model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findAll()));
         return "all-reserved-vhs";
     }
