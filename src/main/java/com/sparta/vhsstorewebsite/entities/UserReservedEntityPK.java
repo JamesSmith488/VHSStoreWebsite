@@ -9,11 +9,11 @@ import java.io.Serializable;
 public class UserReservedEntityPK implements Serializable {
     @Column(name = "user_id")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer userId;
     @Column(name = "film_id")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer filmId;
 
     public Integer getUserId() {

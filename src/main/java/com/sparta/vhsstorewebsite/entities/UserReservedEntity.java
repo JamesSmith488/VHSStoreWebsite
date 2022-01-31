@@ -6,14 +6,22 @@ import javax.persistence.*;
 @Table(name = "user_reserved_entity", schema = "sakila", catalog = "")
 @IdClass(UserReservedEntityPK.class)
 public class UserReservedEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
     @Column(name = "user_id")
     private Integer userId;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
     @Column(name = "film_id")
     private Integer filmId;
+
+    public UserReservedEntity() {
+    }
+
+    public UserReservedEntity(Integer userId, Integer filmId) {
+        this.userId = userId;
+        this.filmId = filmId;
+    }
 
     public Integer getUserId() {
         return userId;
