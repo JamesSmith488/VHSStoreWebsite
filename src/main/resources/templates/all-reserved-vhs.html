@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Reserved VHS</title>
+</head>
+<body>
+<div th:insert="fragments/header"></div>
+<table class="film-table">
+    <thead>
+    <tr>
+        <th>Film name</th>
+        <th>Film description</th>
+        <th>Film age rating</th>
+        <th>Remove</th>
+        <th>Rent</th>
+    </tr>
+    </thead>
+    <tr th:each="film : ${reservedFilms}">
+        <td th:text="${film.title}"></td>
+        <td th:text="${film.description}"></td>
+        <td th:text="${film.rating}"></td>
+
+        <td><a th:href="@{/remove/{id}(id=${film.filmId})}">Remove</a></td>
+        <td><a th:href="@{/rent/{id}(id=${film.filmId})}">Rent</a></td>
+    </tr>
+</table>
+<div th:insert="fragments/footer :: main"></div>
+</body>
+</html>
