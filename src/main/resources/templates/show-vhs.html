@@ -21,6 +21,8 @@
             <td th:text="${film.rating}"></td>
 
             <td><a class="actionButton" th:href="@{/reserve/{id}(id=${film.filmId})}">Reserve</a></td>
+            <td><a class="actionButton" th:href="@{/category/{id}(id=${film.filmId})}">Category</a></td>
+            <td><a class="actionButton" th:href="@{/actor/{id}(id=${film.filmId})}">Actor</a></td>
         </tr>
 </table>
 <br>
