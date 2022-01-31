@@ -280,6 +280,16 @@ public class SiteController {
         return "rented";
     }
 
+    @GetMapping("/return/{id}")
+    public String goToReturnedFilm(@PathVariable("id") Integer id) {
+        filmRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)).setAvailability(true);
+        UserRentedEntity userRentedEntity = userRentedRepository.findByFilmId(id);
+        userRentedRepository.delete(userRentedEntity);
+        //UserReservedEntity userReservedEntity = userReservedRepository.findByFilmId(id);
+        //userReservedRepository.delete(userReservedEntity);
+        return "rented";
+    }
+
     @GetMapping("/customer-waiting-list")
     public String goToCustomerWaitingList(Model model) {
         model.addAttribute("waitings", waitingUserRepository.findAll());
