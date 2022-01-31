@@ -10,18 +10,20 @@
     <thread>
         <tr>
             <th>Film Name</th>
-            <th>Customer Name</th>
-            <th>Rental Data</th>
-            <th>Return Date</th>
-            <th>Edit</th>
+            <th>Rented By</th>
+            <th>Start Of Rental</th>
+            <th>Rental Duration</th>
+            <th>ReplacementCost</th>
+            <th>Returned</th>
         </tr>
     </thread>
     <tr th:each="film : ${rentedFilms}">
         <td th:text="${film.title}"></td>
-<!--        <td th:text="${customer}"-->
-<!--        <td th:text="${rental_date}"></td>-->
-<!--        <td th:text="${return_date}"></td>-->
-<!--        <td><a th:href="@{/edit/{id}(id=${id})}">edit</a></td>-->
+        <td th:text="${users.findByUserId(userLink.findByFilmId(film.filmId).userId).get(0).getEmail()}"></td>
+        <td th:text="${film.lastUpdate}"></td>
+        <td th:text="${film.rentalDuration}"></td>
+        <td th:text="${film.replacementCost}"></td>
+        <td><a th:href="@{/return/{id}(id=${film.filmId})}">Return film</a></td>
     </tr>
 </table>
 <div th:insert="fragments/footer :: main"></div>

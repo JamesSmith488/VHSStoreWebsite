@@ -154,9 +154,10 @@ public class SiteController {
     public String goToReservedVhs(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Integer userId = getUserIdFromName(authentication.getName());
-        boolean isStaff = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("STAFF"));
-        if (isStaff) model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findAll()));
-        else model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findByUserId(userId)));
+//        boolean isStaff = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("STAFF"));
+//        if (isStaff) model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findAll()));
+//        else model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findByUserId(userId)));
+        model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findByUserId(userId)));
         return "reserved-vhs";
     }
 
@@ -175,6 +176,14 @@ public class SiteController {
     public String getAllVhs(Model model) {
         model.addAttribute("films", filmRepository.findAllByAvailabilityTrue());
         return "show-vhs";
+    }
+
+    @GetMapping("/all-reserved-vhs")
+    public String goToAllReservedVhs(Model model) {
+        model.addAttribute("users", userRepository);
+        model.addAttribute("userLink", userReservedRepository);
+        model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findAll()));
+        return "all-reserved-vhs";
     }
 
     @GetMapping("/add-user")
@@ -265,7 +274,19 @@ public class SiteController {
 
     @GetMapping("/rented")
     public String goToRented(Model model) {
-        model.addAttribute("rentedFilms", rentedFilmRepository.findAll());
+        model.addAttribute("users", userRepository);
+        model.addAttribute("userLink", userRentedRepository);
+        model.addAttribute("rentedFilms", getRentedFilms(userRentedRepository.findAll()));
+        return "rented";
+    }
+
+    @GetMapping("/return/{id}")
+    public String goToReturnedFilm(@PathVariable("id") Integer id) {
+        filmRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)).setAvailability(true);
+        UserRentedEntity userRentedEntity = userRentedRepository.findByFilmId(id);
+        userRentedRepository.delete(userRentedEntity);
+        //UserReservedEntity userReservedEntity = userReservedRepository.findByFilmId(id);
+        //userReservedRepository.delete(userReservedEntity);
         return "rented";
     }
 
@@ -343,6 +364,14 @@ public class SiteController {
     private List<FilmEntity> getReservedFilms(List<UserReservedEntity> userFilms){
         List<FilmEntity> films = new ArrayList<>();
         for (UserReservedEntity userFilm: userFilms) {
+            films.add(filmRepository.getById(userFilm.getFilmId()));
+        }
+        return films;
+    }
+
+    private List<FilmEntity> getRentedFilms(List<UserRentedEntity> userFilms){
+        List<FilmEntity> films = new ArrayList<>();
+        for (UserRentedEntity userFilm: userFilms) {
             films.add(filmRepository.getById(userFilm.getFilmId()));
         }
         return films;
