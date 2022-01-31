@@ -3,6 +3,7 @@ package com.sparta.vhsstorewebsite.services;
 import com.sparta.vhsstorewebsite.entities.FilmEntity;
 import com.sparta.vhsstorewebsite.entities.RentedFilmEntity;
 import com.sparta.vhsstorewebsite.entities.ReservedFilmEntity;
+import com.sparta.vhsstorewebsite.entities.UserReservedEntity;
 
 import java.util.Optional;
 

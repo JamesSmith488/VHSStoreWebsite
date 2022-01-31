@@ -54,6 +54,11 @@ th,td {
     text-shadow: 3px 3px 5px #000000;
 }
 
+.toAdminButton{
+    padding-left: 50px;
+    font-size: 15px;
+    color: #cecece;
+}
 .titleText:link{
     color: #ffffff;
     text-decoration: none;

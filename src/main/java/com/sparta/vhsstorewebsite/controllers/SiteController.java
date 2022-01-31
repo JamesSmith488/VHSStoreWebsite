@@ -7,10 +7,13 @@ import com.sparta.vhsstorewebsite.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +30,13 @@ public class SiteController {
     private final StaffRepository staffRepository;
     private final UserRepository userRepository;
     private final WaitingUserRepository waitingUserRepository;
+    private final UserReservedRepository userReservedRepository;
+    private final UserRentedRepository userRentedRepository;
     private final UserService userService = new UserService();
     private final FilmService filmService = new FilmService();
 
     @Autowired
-    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, ReservedFilmRepository reservedFilmRepository, RentedFilmRepository rentedFilmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository) {
+    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, ReservedFilmRepository reservedFilmRepository, RentedFilmRepository rentedFilmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository, UserReservedRepository userReservedRepository, UserRentedRepository userRentedRepository) {
         this.actorRepository = actorRepository;
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
@@ -43,6 +48,8 @@ public class SiteController {
         this.staffRepository = staffRepository;
         this.userRepository = userRepository;
         this.waitingUserRepository = waitingUserRepository;
+        this.userReservedRepository = userReservedRepository;
+        this.userRentedRepository = userRentedRepository;
     }
 
     @GetMapping("/")
@@ -128,24 +135,29 @@ public class SiteController {
 
     @GetMapping("/reserve/{id}")
     public String reserveVhs(@PathVariable("id") Integer id){
-        ReservedFilmEntity reservedFilmEntity = filmService.convertToReservation(filmRepository.findById(id).
-                orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)));
         filmRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)).setAvailability(false);
-        reservedFilmRepository.save(reservedFilmEntity);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Integer userId = getUserIdFromName(authentication.getName());
+        userReservedRepository.save(new UserReservedEntity(userId, id));
         return "reserved-vhs";
     }
 
     @GetMapping("/remove/{id}")
     public String removeReservedVhs(@PathVariable("id") Integer id){
         filmRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)).setAvailability(true);
-        ReservedFilmEntity reservedFilmEntity = reservedFilmRepository.getById(id);
-        reservedFilmRepository.delete(reservedFilmEntity);
+        UserReservedEntity userReservedEntity = userReservedRepository.findByFilmId(id);
+        userReservedRepository.delete(userReservedEntity);
         return "reserved-vhs";
     }
 
     @GetMapping("/reserved-vhs")
     public String goToReservedVhs(Model model) {
-        model.addAttribute("reservedFilms", reservedFilmRepository.findAll());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Integer userId = getUserIdFromName(authentication.getName());
+//        boolean isStaff = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("STAFF"));
+//        if (isStaff) model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findAll()));
+//        else model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findByUserId(userId)));
+        model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findByUserId(userId)));
         return "reserved-vhs";
     }
 
@@ -164,6 +176,14 @@ public class SiteController {
     public String getAllVhs(Model model) {
         model.addAttribute("films", filmRepository.findAllByAvailabilityTrue());
         return "show-vhs";
+    }
+
+    @GetMapping("/all-reserved-vhs")
+    public String goToAllReservedVhs(Model model) {
+        model.addAttribute("users", userRepository);
+        model.addAttribute("userLink", userReservedRepository);
+        model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findAll()));
+        return "all-reserved-vhs";
     }
 
     @GetMapping("/add-user")
@@ -242,9 +262,31 @@ public class SiteController {
         return "index";
     }
 
+    @GetMapping("/rent/{id}")
+    public String rentVHS(@PathVariable("id") Integer id){
+        UserReservedEntity userReservedEntity = userReservedRepository.findByFilmId(id);
+        FilmEntity filmEntity = filmRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id));
+        userRentedRepository.save(new UserRentedEntity(userReservedEntity.getUserId(), userReservedEntity.getFilmId()));
+        userReservedRepository.delete(userReservedEntity);
+        return "index";
+    }
+
     @GetMapping("/rented")
     public String goToRented(Model model) {
-        model.addAttribute("rentedFilms", rentedFilmRepository.findAll());
+        model.addAttribute("users", userRepository);
+        model.addAttribute("userLink", userRentedRepository);
+        model.addAttribute("rentedFilms", getRentedFilms(userRentedRepository.findAll()));
+        return "rented";
+    }
+
+    @GetMapping("/return/{id}")
+    public String goToReturnedFilm(@PathVariable("id") Integer id) {
+        filmRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id)).setAvailability(true);
+        UserRentedEntity userRentedEntity = userRentedRepository.findByFilmId(id);
+        userRentedRepository.delete(userRentedEntity);
+        //UserReservedEntity userReservedEntity = userReservedRepository.findByFilmId(id);
+        //userReservedRepository.delete(userReservedEntity);
         return "rented";
     }
 
@@ -258,6 +300,15 @@ public class SiteController {
     public String goToStaff(Model model) {
         model.addAttribute("staff", getStaff(userRepository.findAll()));
         return "show-staff";
+    }
+
+    @RequestMapping(value="/logout", method = RequestMethod.GET)
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/";
     }
 
     private List<UserEntity> getStaff(List<UserEntity> allUsers){
@@ -308,6 +359,30 @@ public class SiteController {
             }
         }
         return actorSortedFilms;
+    }
+
+    private List<FilmEntity> getReservedFilms(List<UserReservedEntity> userFilms){
+        List<FilmEntity> films = new ArrayList<>();
+        for (UserReservedEntity userFilm: userFilms) {
+            films.add(filmRepository.getById(userFilm.getFilmId()));
+        }
+        return films;
+    }
+
+    private List<FilmEntity> getRentedFilms(List<UserRentedEntity> userFilms){
+        List<FilmEntity> films = new ArrayList<>();
+        for (UserRentedEntity userFilm: userFilms) {
+            films.add(filmRepository.getById(userFilm.getFilmId()));
+        }
+        return films;
+    }
+
+    private Integer getUserIdFromName(String email){
+        List<UserEntity> userEntities = userRepository.findAll();
+        for (UserEntity user: userEntities) {
+            if (user.getEmail().equals(email)) return user.getUserId();
+        }
+        return null;
     }
 
 }

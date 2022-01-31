@@ -10,5 +10,6 @@ public class UserService {
         user.setStoreAddress(updatedUser.getStoreAddress());
         user.setPassword(updatedUser.getPassword());
         user.setRole(updatedUser.getRole());
+        user.setUserEnabled(updatedUser.getUserEnabled());
     }
 }
