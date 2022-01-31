@@ -277,7 +277,8 @@ public class SiteController {
 
     @GetMapping("/rented")
     public String goToRented(Model model) {
-        model.addAttribute("userLink", userRentedRepository.findAll());
+        model.addAttribute("users", userRepository);
+        model.addAttribute("userLink", userRentedRepository);
         model.addAttribute("rentedFilms", getRentedFilms(userRentedRepository.findAll()));
         return "rented";
     }

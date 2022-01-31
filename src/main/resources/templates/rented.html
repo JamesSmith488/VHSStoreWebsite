@@ -10,6 +10,7 @@
     <thread>
         <tr>
             <th>Film Name</th>
+            <th>Rented By</th>
             <th>Start Of Rental</th>
             <th>Rental Duration</th>
             <th>ReplacementCost</th>
@@ -18,6 +19,7 @@
     </thread>
     <tr th:each="film : ${rentedFilms}">
         <td th:text="${film.title}"></td>
+        <td th:text="${users.findByUserId(userLink.findByFilmId(film.filmId).userId).get(0).getEmail()}"></td>
         <td th:text="${film.lastUpdate}"></td>
         <td th:text="${film.rentalDuration}"></td>
         <td th:text="${film.replacementCost}"></td>
