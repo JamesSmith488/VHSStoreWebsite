@@ -28,11 +28,12 @@ public class SiteController {
     private final UserRepository userRepository;
     private final WaitingUserRepository waitingUserRepository;
     private final UserReservedRepository userReservedRepository;
+    private final UserRentedRepository userRentedRepository;
     private final UserService userService = new UserService();
     private final FilmService filmService = new FilmService();
 
     @Autowired
-    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, ReservedFilmRepository reservedFilmRepository, RentedFilmRepository rentedFilmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository, UserReservedRepository userReservedRepository) {
+    public SiteController(ActorRepository actorRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository, FilmActorRepository filmActorRepository, FilmCategoryRepository filmCategoryRepository, FilmRepository filmRepository, ReservedFilmRepository reservedFilmRepository, RentedFilmRepository rentedFilmRepository, StaffRepository staffRepository, UserRepository userRepository, WaitingUserRepository waitingUserRepository, UserReservedRepository userReservedRepository, UserRentedRepository userRentedRepository) {
         this.actorRepository = actorRepository;
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
@@ -45,6 +46,7 @@ public class SiteController {
         this.userRepository = userRepository;
         this.waitingUserRepository = waitingUserRepository;
         this.userReservedRepository = userReservedRepository;
+        this.userRentedRepository = userRentedRepository;
     }
 
     @GetMapping("/")
@@ -149,7 +151,9 @@ public class SiteController {
     public String goToReservedVhs(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Integer userId = getUserIdFromName(authentication.getName());
-        model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findByUserId(userId)));
+        boolean isStaff = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("STAFF"));
+        if (isStaff) model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findAll()));
+        else model.addAttribute("reservedFilms", getReservedFilms(userReservedRepository.findByUserId(userId)));
         return "reserved-vhs";
     }
 
@@ -243,6 +247,16 @@ public class SiteController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id));
         //filmService.update(updatedUser, userEntity);
         filmRepository.save(filmEntity);
+        return "index";
+    }
+
+    @GetMapping("/rent/{id}")
+    public String rentVHS(@PathVariable("id") Integer id){
+        UserReservedEntity userReservedEntity = userReservedRepository.findByFilmId(id);
+        FilmEntity filmEntity = filmRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Film ID" + id));
+        userRentedRepository.save(new UserRentedEntity(userReservedEntity.getUserId(), userReservedEntity.getFilmId()));
+        userReservedRepository.delete(userReservedEntity);
         return "index";
     }
 

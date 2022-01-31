@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:insert="fragments/header"></div>
-<form th:action="@{/save-customer}" th:object="${customer}" method="post">
+<form th:action="@{/save-user}" th:object="${customer}" method="post">
 <!--    Needs Username and Password-->
     <label>First Name: </label>
     <input type="text" th:field="*{firstName}"/><br>
