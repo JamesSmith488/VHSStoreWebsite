@@ -113,6 +113,7 @@ public class SiteController {
         model.addAttribute("searchResults", foundFilms);
         return "search-results";
     }
+
     @PostMapping("/search-results-by-actor")
     public String getSearchResultsByActor(@ModelAttribute("firstName") String firstName, @ModelAttribute("lastName") String lastName, Model model) {
         List<FilmEntity> foundFilms = getActorFilms(firstName, lastName);
@@ -159,6 +160,18 @@ public class SiteController {
         model.addAttribute("reservedFilms", userReservedRepository.findByFilmId(id));
         model.addAttribute("categories", categoryRepository.findAll());
         return "category-vhs";
+    }
+
+    @PostMapping("/category/{id}")
+    public String postCategory(@PathVariable("id") Integer id, @ModelAttribute("categoryName") String categoryName, Model model) {
+        CategoryEntity categoryEntity = getCategoryFilms(categoryName);
+        CategoryEntity categoryEntity = categoryRepository.findByName(categoryName);
+        FilmCategoryEntity filmCategoryEntity = filmCategoryRepository.findByFilmIdAndCategoryId(id, categoryEntity.getCategoryId());
+//        filmCategoryEntity.set
+        model.addAttribute("searchResults", foundFilms);
+        model.addAttribute("reservedFilms", userReservedRepository.findByFilmId(id));
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "search-results";
     }
 
 //    @GetMapping("/category")
@@ -345,11 +358,11 @@ public class SiteController {
     }
 
     private List<FilmEntity> getCategoryFilms(String categoryName) {
-        List<CategoryEntity> categories = categoryRepository.findByName(categoryName);
+        CategoryEntity category = categoryRepository.findByName(categoryName);
         List<FilmCategoryEntity> filmCategories = filmCategoryRepository.findAll();
         List<FilmEntity> categorySortedFilms = new ArrayList<>();
         List<FilmEntity> availableFilms = filmRepository.findAllByAvailabilityTrue();
-        for (CategoryEntity category: categories) {
+//        for (CategoryEntity category: categories) {
             for (FilmCategoryEntity filmCategory : filmCategories) {
                 if (category.getCategoryId().equals(filmCategory.getCategoryId())) {
                     if (availableFilms.get(filmCategory.getFilmId()).getAvailability()) {
@@ -357,7 +370,6 @@ public class SiteController {
                     }
                 }
             }
-        }
         return categorySortedFilms;
     }
 
