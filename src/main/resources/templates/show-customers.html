@@ -21,8 +21,8 @@
             <td th:text="${customer.email}"></td>
             <td th:text="${customer.storeAddress}"></td>
 
-            <td><a class="actionButton" th:href="@{/delete/{id}(id=${customer.userId})}">delete</a></td>
-            <td><a class="actionButton" th:href="@{/edit/{id}(id=${customer.userId})}">edit</a></td>
+            <td><a class="actionButton" th:href="@{/delete-user/{id}(id=${customer.userId})}">delete</a></td>
+            <td><a class="actionButton" th:href="@{/edit-user/{id}(id=${customer.userId})}">edit</a></td>
         </tr>
 </table>
 
