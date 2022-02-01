@@ -20,21 +20,17 @@
         <td th:text="${staff.lastName}"></td>
         <td th:text="${staff.email}"></td>
         <td th:text="${staff.storeAddress}"></td>
-
-
         <td><a class="actionButton" th:href="@{/delete-user/{id}(id=${staff.userId})}">delete</a></td>
         <td><a class="actionButton" th:href="@{/edit-user/{id}(id=${staff.userId})}">edit</a></td>
     </tr>
 </table>
 <br>
-
 <div class="search-container">
     <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button th:href="@{/show-staff}" class="btn btn-outline-success" type="submit">Search</button>
     </form>
 </div>
-
 <div th:insert="fragments/footer :: main"></div>
 </body>
 </html>

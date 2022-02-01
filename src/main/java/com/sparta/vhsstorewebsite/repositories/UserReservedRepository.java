@@ -10,5 +10,7 @@ import java.util.List;
 public interface UserReservedRepository extends JpaRepository<UserReservedEntity, Integer> {
 
     List<UserReservedEntity> findByUserId(Integer userId);
+
     UserReservedEntity findByFilmId(Integer filmId);
+
 }

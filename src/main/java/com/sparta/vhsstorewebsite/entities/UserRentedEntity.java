@@ -3,7 +3,7 @@ package com.sparta.vhsstorewebsite.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user_rented_entity", schema = "sakila", catalog = "")
+@Table(name = "user_rented_entity", schema = "sakila")
 @IdClass(UserRentedEntityPK.class)
 public class UserRentedEntity {
 

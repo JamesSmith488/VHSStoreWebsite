@@ -7,7 +7,6 @@
 <body>
 <div th:insert="fragments/header"></div>
 <form th:action="@{/save-vhs}" th:object="${film}" method="post">
-    <!--    needs category-->
     <label>Title: </label>
     <input type="text" th:field="*{title}"/><br>
     <label>Description: </label>

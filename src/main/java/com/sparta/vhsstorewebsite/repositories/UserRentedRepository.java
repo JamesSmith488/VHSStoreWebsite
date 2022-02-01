@@ -11,5 +11,7 @@ import java.util.List;
 public interface UserRentedRepository extends JpaRepository<UserRentedEntity, Integer> {
 
     List<UserRentedEntity> findByUserId(Integer userId);
+
     UserRentedEntity findByFilmId(Integer filmId);
+
 }

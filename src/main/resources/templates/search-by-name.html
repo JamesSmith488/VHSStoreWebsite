@@ -6,30 +6,13 @@
 </head>
 <body>
 <div th:insert="fragments/header"></div>
-
 <div class="search-bar">
     <form th:action="@{search-results-by-name}" method="post">
-
         <label>Film name:</label>
         <input type="text" name="filmName"/>
-
-<!--        <label> Actor: </label>-->
-<!--        <input type="text" name="actorName">-->
-
-<!--        <label> Category: </label>-->
-<!--        <select th:field="*{categories}">-->
-<!--            <option value="">All</option>-->
-<!--            <option th:each="category : ${categories}"-->
-<!--                    th:value="${category_id}"-->
-<!--                    th:text="${category.name}">-->
-
-<!--            </option>-->
-<!--        </select>-->
-
         <input type="submit" value="SEARCH">
     </form>
 </div>
-
 <div th:insert="fragments/footer"></div>
 </body>
 </html>

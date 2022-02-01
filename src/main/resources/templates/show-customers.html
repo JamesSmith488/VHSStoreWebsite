@@ -15,22 +15,19 @@
         <th>Address</th>
     </tr>
     </thead>
-        <tr th:each="customer : ${customers}">
-            <td th:text="${customer.firstName}"></td>
-            <td th:text="${customer.lastName}"></td>
-            <td th:text="${customer.email}"></td>
-            <td th:text="${customer.storeAddress}"></td>
-
-            <td><a class="actionButton" th:href="@{/delete-user/{id}(id=${customer.userId})}">delete</a></td>
-            <td><a class="actionButton" th:href="@{/edit-user/{id}(id=${customer.userId})}">edit</a></td>
-        </tr>
+    <tr th:each="customer : ${customers}">
+        <td th:text="${customer.firstName}"></td>
+        <td th:text="${customer.lastName}"></td>
+        <td th:text="${customer.email}"></td>
+        <td th:text="${customer.storeAddress}"></td>
+        <td><a class="actionButton" th:href="@{/delete-user/{id}(id=${customer.userId})}">delete</a></td>
+        <td><a class="actionButton" th:href="@{/edit-user/{id}(id=${customer.userId})}">edit</a></td>
+    </tr>
 </table>
-
 <form class="d-flex">
     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
     <button th:href="@{/show-customers}" class="btn btn-outline-success" type="submit">Search</button>
 </form>
-
 <div th:insert="fragments/footer :: main"></div>
 </body>
 </html>
