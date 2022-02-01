@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add User</title>
+</head>
+<body>
+<div th:insert="fragments/header"></div>
+<form th:action="@{/save-user}" th:object="${customer}" method="post">
+    <label>First Name: </label>
+    <input type="text" th:field="*{firstName}"/><br>
+    <label>Last Name: </label>
+    <input type="text" th:field="*{lastName}"/><br>
+    <label>Password: </label>
+    <input type="password" th:field="*{password}"/><br>
+    <label>Address: </label>
+    <select name="storeSelection" id="storeSelection" th:field="*{storeAddress}">
+        <option value="Skegness">Skegness</option>
+        <option value="Stoke-On-Trent">Stoke-On-Trent</option>
+        <option value="Wells">Wells</option>
+        <option value="Salisbury">Salisbury</option>
+        <option value="Ripon">Ripon</option>
+    </select><br>
+    <label>Email: </label>
+    <input type="text" th:field="*{email}"/><br>
+    <label for="roleSeletion">Role: </label>
+    <select name="role" id="roleSeletion" th:field="*{role}">
+        <option value="STAFF">Staff</option>
+        <option value="CUSTOMER">Customer</option>
+    </select><br>
+    <label>userEnabled</label>
+    <label>
+        <input type="number" th:field="*{userEnabled}"/>
+    </label><br>
+
+    <button type="submit">Add User</button>
+</form>
+<div th:insert="fragments/footer :: main"></div>
+</body>
+</html>

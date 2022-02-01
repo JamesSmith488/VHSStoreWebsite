@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+</head>
+<body>
+<div th:insert="fragments/header"></div>
+<h1>Search Results</h1>
+<table class="search-results-table" id="search-results-table">
+    <thead>
+    <tr>
+        <th>Film name</th>
+        <th>Film description</th>
+        <th>Film age rating</th>
+    </tr>
+    </thead>
+    <tr th:each="film : ${searchResults}">
+        <td th:text="${film.title}"></td>
+        <td th:text="${film.description}"></td>
+        <td th:text="${film.rating}"></td>
+        <td><a class="actionButton" th:href="@{/reserve/{id}(id=${film.filmId})}">Reserve</a></td>
+    </tr>
+</table>
+<div th:insert="fragments/footer"></div>
+</body>
+</html>

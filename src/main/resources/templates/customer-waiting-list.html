@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Waiting List</title>
+</head>
+<body>
+<div th:insert="fragments/header"></div>
+<table class="customer-table">
+    <thead>
+    <tr>
+        <th>First Name</th>
+        <th>Second Name</th>
+        <th>Email</th>
+        <th>Address</th>
+    </tr>
+    </thead>
+    <tr th:each="waiting : ${waitings}">
+        <td th:text="${waiting.firstName}"></td>
+        <td th:text="${waiting.lastName}"></td>
+        <td th:text="${waiting.email}"></td>
+        <td th:text="${waiting.storeAddress}"></td>
+
+        <td><a th:href="@{/accept/{id}(id=${waiting.userId})}">Accept</a></td>
+        <td><a th:href="@{/reject/{id}(id=${waiting.userId})}">Reject</a></td>
+    </tr>
+</table>
+
+<div th:insert="fragments/footer :: main"></div>
+</body>
+</html>
